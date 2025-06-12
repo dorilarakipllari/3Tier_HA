@@ -10,29 +10,25 @@ const pool = mysql.createPool({
 });
 
 // Add feedback
-function addFeedback(name, message) {
+function addFeedback(name, message, callback) {
   const sql = "INSERT INTO feedback (name, message) VALUES (?, ?)";
-  pool.query(sql, [name, message], (err) => {
-    if (err) throw err;
-    console.log("Feedback added.");
+  pool.query(sql, [name, message], (err, result) => {
+    callback(err, result);
   });
 }
 
-// Get all feedback
 function getAllFeedback(callback) {
   const sql = "SELECT * FROM feedback";
   pool.query(sql, (err, results) => {
-    if (err) throw err;
-    callback(results);
+    callback(err, results);  // send both err and results
   });
 }
 
-// Delete all feedback
+
 function deleteAllFeedback(callback) {
   const sql = "DELETE FROM feedback";
   pool.query(sql, (err, result) => {
-    if (err) throw err;
-    callback(result);
+    callback(err, result); // return error
   });
 }
 
